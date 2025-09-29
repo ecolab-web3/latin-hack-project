@@ -112,9 +112,43 @@ sequenceDiagram
     npm run start:dev
     ```
 
-## 5. Variables de Entorno
+## 5. API Endpoints
 
-El archivo `.env` debe contener las siguientes variables:
+El indexador expone una API RESTful para consultar los datos procesados de manera eficiente.
+
+### Consultar Tokens por Billetera
+
+Este endpoint demuestra la eficiencia de tener los datos indexados, permitiendo consultas instantáneas sin interactuar con la blockchain.
+
+- **Endpoint:** `GET /proyectos/wallet/:address`
+- **Descripción:** Devuelve una lista de todos los créditos tokenizados (y sus cantidades) que pertenecen a una dirección de billetera específica. Incluye la información detallada del proyecto al que pertenece cada crédito.
+- **Parámetros:**
+  - `address` (string): La dirección de la billetera (ej. `0x...`).
+- **Respuesta Exitosa (200 OK):**
+
+```json
+[
+  {
+    "id": 1,
+    "tokenId": 101,
+    "ownerWallet": "0x1234...abcd",
+    "cantidad": "50.00",
+    "createdAt": "2023-10-27T10:00:00.000Z",
+    "updatedAt": "2023-10-27T10:00:00.000Z",
+    "proyecto": {
+      "id": "a1b2c3d4-...",
+      "nombre": "Proyecto de Reforestación Amazónica",
+      "tipoCredito": "CARBONO",
+      "contractAddress": "0xABCD...1234",
+      "ipfsHashDocumentos": "Qm..."
+    }
+  }
+]
+```
+
+## 6. Variables de Entorno
+
+El archivo `.env` debe contener las siguientes variables para que el servicio funcione correctamente:
 
 ```dotenv
 # Configuración de la Base de Datos

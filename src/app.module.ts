@@ -26,7 +26,7 @@ import { AppService } from './app.service';
         synchronize: true, // ¡Perfecto para MVP! Crea/actualiza las tablas automáticamente. Desactiva en producción.
       }),
     }),
-    ProyectosModule,
+    ProyectosModule, // Este módulo ahora contiene nuestro controlador y servicio
     CreditoTokensModule,
     BlockchainListenerModule,
   ],
