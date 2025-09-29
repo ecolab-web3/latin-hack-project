@@ -1,0 +1,20 @@
+# Manejo de saltos de línea consistente
+* text=auto
+
+# Archivos de código siempre con LF
+*.js text eol=lf
+*.ts text eol=lf
+*.json text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.md text eol=lf
+
+# Archivos binarios (no tocar)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.gz binary

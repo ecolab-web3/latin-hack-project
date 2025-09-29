@@ -1,98 +1,168 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Sustainable Credits Indexer
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+![NestJS](https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
+![Ethers.js](https://img.shields.io/badge/Ethers.js-2C2C34?style=for-the-badge&logo=ethereum&logoColor=white)
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Servicio de indexación off-chain para eventos de contratos inteligentes ERC-1155 de créditos de sostenibilidad.
 
-## Description
+---
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 1. Resumen del Proyecto
 
-## Project setup
+El **Sustainable Credits Indexer** es un servicio backend robusto y escalable construido con **NestJS**. Su propósito fundamental es actuar como un puente de datos eficiente entre la blockchain y nuestra plataforma de aplicación.
 
-```bash
-$ npm install
+El servicio escucha activamente los eventos de contratos inteligentes (estándar ERC-1155) que representan **Activos del Mundo Real (RWA)**, como créditos de carbono, biodiversidad o reciclaje. Procesa estos eventos en tiempo real y los persiste en una base de datos relacional (PostgreSQL), creando una fuente de datos rápida, fiable y consultable.
+
+Esto elimina la necesidad de que las aplicaciones cliente interactúen directamente con la blockchain para consultas de estado (ej. saldos de tokens), lo cual sería lento, costoso e ineficiente.
+
+## 2. Arquitectura y Flujo de Datos
+
+El sistema está diseñado para ser desacoplado y auto-configurable, siguiendo un flujo de trabajo claro y eficiente.
+
+```mermaid
+sequenceDiagram
+    participant Admin
+    participant API_Principal
+    participant DB[PostgreSQL Database]
+    participant Indexer [Sustainable Credits Indexer]
+    participant Blockchain
+
+    Admin->>API_Principal: POST /proyectos (nombre, contractAddress, etc.)
+    API_Principal->>DB: INSERT INTO proyectos
+    Note over DB: Nuevo proyecto registrado
+
+    %% El indexador detecta el nuevo proyecto %%
+    loop Búsqueda periódica
+        Indexer->>DB: SELECT * FROM proyectos
+    end
+    Indexer-->>Indexer: Descubre el nuevo contrato
+    Indexer->>Blockchain: Se suscribe a eventos de 'contractAddress'
+
+    %% Ocurre una transacción en la blockchain %%
+    Blockchain-->>Indexer: Emite evento 'TransferSingle'
+    Indexer->>Indexer: Procesa el evento (Mint, Transfer o Burn)
+    Indexer->>DB: Inicia Transacción
+    Indexer->>DB: UPDATE/INSERT en 'credito_tokens' (atómico)
+    Indexer->>DB: Commit Transacción
 ```
 
-## Compile and run the project
+### Componentes Clave:
 
-```bash
-# development
-$ npm run start
+- **NestJS:** Framework progresivo de Node.js para construir aplicaciones backend eficientes y escalables.
+- **TypeORM:** Un ORM para TypeScript que permite una interacción fluida y segura con la base de datos.
+- **PostgreSQL:** Base de datos relacional robusta para almacenar el estado indexado.
+- **Ethers.js:** Librería para interactuar con la blockchain Ethereum (o redes compatibles como Polygon), permitiendo la conexión a nodos RPC y la decodificación de eventos.
 
-# watch mode
-$ npm run start:dev
+## 3. Características Principales
 
-# production mode
-$ npm run start:prod
+- **Indexación en Tiempo Real:** Utiliza WebSockets para conectarse a un nodo RPC y escuchar eventos de contratos tan pronto como se emiten.
+- **Configuración Dinámica:** El servicio consulta periódicamente la base de datos para descubrir nuevos contratos de proyectos. Esto permite añadir soporte a nuevos proyectos sin necesidad de reiniciar o redesplegar el indexador.
+- **Operaciones Atómicas:** Todas las actualizaciones en la base de datos que involucran múltiples registros (como una transferencia de tokens) se envuelven en **transacciones de base de datos**. Esto garantiza la integridad de los datos: o todas las operaciones se completan con éxito, o ninguna lo hace.
+- **Manejo Integral de ERC-1155:** Interpreta correctamente el evento `TransferSingle` para diferenciar entre:
+  - **Acuñación (Mint):** `from` es la dirección cero.
+  - **Transferencia (Transfer):** `from` y `to` son billeteras válidas.
+  - **Quema (Burn):** `to` es la dirección cero.
+- **Resiliencia:** Diseñado para manejar la lógica de negocio de forma segura, validando saldos antes de realizar débitos y registrando errores de forma detallada.
+
+## 4. Primeros Pasos
+
+### Prerrequisitos
+
+- Node.js (v18 o superior)
+- npm o yarn
+- PostgreSQL (se recomienda ejecutarlo con Docker)
+- Una URL de un nodo RPC (ej. de Alchemy, Infura o un nodo propio) para la red blockchain a monitorear.
+
+### Instalación
+
+1.  **Clonar el repositorio:**
+
+    ```bash
+    git clone https://github.com/ecolab-web3/latin-hack-project
+    cd sustainable-credits-indexer
+    ```
+
+2.  **Instalar dependencias:**
+
+    ```bash
+    npm install
+    ```
+
+3.  **Configurar variables de entorno:**
+    Crea un archivo `.env` en la raíz del proyecto a partir del ejemplo.
+
+    ```bash
+    cp .env.example .env
+    ```
+
+    Luego, edita el archivo `.env` con tus propias credenciales y endpoints.
+
+4.  **Iniciar la base de datos:**
+    Si usas Docker, puedes iniciar una instancia de PostgreSQL con:
+
+    ```bash
+    docker run --name some-postgres -e POSTGRES_PASSWORD=mysecretpassword -e POSTGRES_USER=user -e POSTGRES_DB=sustainable_credits -p 5432:5432 -d postgres
+    ```
+
+5.  **Ejecutar la aplicación:**
+    El servicio se iniciará, se conectará a la base de datos, buscará proyectos y comenzará a escuchar eventos.
+    ```bash
+    npm run start:dev
+    ```
+
+## 5. Variables de Entorno
+
+El archivo `.env` debe contener las siguientes variables:
+
+```dotenv
+# Configuración de la Base de Datos
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=user
+DB_PASSWORD=mysecretpassword
+DB_DATABASE=sustainable_credits
+
+# Configuración de la Blockchain
+JSON_RPC_URL="https://polygon-mumbai.g.alchemy.com/v2/YOUR_ALCHEMY_KEY"
+
+# ABI del Contrato ERC-1155
+# Debe ser una cadena JSON minificada en una sola línea.
+CONTRACT_ABI='[{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"operator","type":"address"},{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256[]","name":"ids","type":"uint256[]"},{"indexed":false,"internalType":"uint256[]","name":"values","type":"uint256[]"}],"name":"TransferBatch","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"operator","type":"address"},{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"id","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"TransferSingle","type":"event"}]'
 ```
 
-## Run tests
+## 6. Estructura de la Base de Datos
 
-```bash
-# unit tests
-$ npm run test
+El servicio utiliza dos entidades principales:
 
-# e2e tests
-$ npm run test:e2e
+### `Proyecto`
 
-# test coverage
-$ npm run test:cov
-```
+Representa un proyecto de sostenibilidad del mundo real.
 
-## Deployment
+- `id`: Identificador único.
+- `nombre`: Nombre del proyecto.
+- `tipoCredito`: Enum (`CARBONO`, `BIODIVERSIDAD`, `RECICLAJE`).
+- `contractAddress`: **Clave.** La dirección del contrato inteligente que emite los créditos para este proyecto.
+- `ipfsHashDocumentos`: Hash de IPFS que apunta a la documentación de verificación.
+- ... y otros metadatos.
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+### `CreditoToken`
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+Representa el balance de un tipo de crédito para un propietario específico. Es el resultado de la indexación.
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
+- `id`: Identificador único.
+- `tokenId`: El ID del token dentro del contrato ERC-1155.
+- `ownerWallet`: La dirección de la billetera del propietario.
+- `cantidad`: La cantidad de créditos que posee.
+- `proyecto`: Relación con la entidad `Proyecto`.
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## 7. Contribuciones
 
-## Resources
+Las contribuciones son bienvenidas. Para cambios importantes, por favor abre un _issue_ primero para discutir lo que te gustaría cambiar.
 
-Check out a few resources that may come in handy when working with NestJS:
+Asegúrate de actualizar las pruebas según corresponda.
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+## 8. Licencia
 
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+MIT
