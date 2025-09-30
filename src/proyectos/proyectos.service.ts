@@ -3,6 +3,8 @@ import {
   NotFoundException,
   ConflictException,
 } from '@nestjs/common';
+import * as fs from 'fs/promises';
+import * as path from 'path';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreditoToken } from '../credito-tokens/entities/credito-token.entity';
@@ -20,6 +22,7 @@ export class ProyectosService {
   ) {}
 
   async create(createProyectoDto: CreateProyectoDto): Promise<Proyecto> {
+    const { abiName, ...restOfDto } = createProyectoDto;
     const existingProject = await this.proyectoRepository.findOne({
       where: { contractAddress: createProyectoDto.contractAddress },
     });
@@ -30,11 +33,21 @@ export class ProyectosService {
       );
     }
 
-    const nuevoProyecto = this.proyectoRepository.create(createProyectoDto);
+    // Cargar el ABI desde el archivo .json
+    const abi = await this.loadAbiFromFile(abiName);
+
+    const nuevoProyecto = this.proyectoRepository.create({
+      ...restOfDto,
+      abi, // Guardamos el objeto ABI completo en la BD
+    });
+
     return this.proyectoRepository.save(nuevoProyecto);
   }
 
-  async update(id: string, updateProyectoDto: UpdateProyectoDto): Promise<Proyecto> {
+  async update(
+    id: string,
+    updateProyectoDto: UpdateProyectoDto,
+  ): Promise<Proyecto> {
     // `preload` busca el proyecto por ID y luego fusiona los nuevos datos del DTO.
     // Si no encuentra el proyecto, devuelve undefined.
     const proyecto = await this.proyectoRepository.preload({
@@ -78,5 +91,27 @@ export class ProyectosService {
     }
 
     return tokens;
+  }
+
+  /**
+   * Carga un archivo ABI desde el directorio 'src/abis'.
+   * @param abiName El nombre del archivo ABI (sin la extensión .abi.json).
+   * @returns El contenido del ABI parseado como un objeto JSON.
+   */
+  private async loadAbiFromFile(abiName: string): Promise<any[]> {
+    const abiPath = path.join(
+      __dirname,
+      '..', // Sube un nivel desde 'proyectos'
+      'abis',
+      `${abiName}.abi.json`,
+    );
+    try {
+      const fileContent = await fs.readFile(abiPath, 'utf-8');
+      return JSON.parse(fileContent);
+    } catch (error) {
+      throw new NotFoundException(
+        `El archivo ABI '${abiName}.abi.json' no fue encontrado o es inválido.`,
+      );
+    }
   }
 }

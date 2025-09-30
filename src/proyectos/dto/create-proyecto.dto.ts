@@ -33,9 +33,9 @@ export class CreateProyectoDto {
   @IsNotEmpty()
   contractAddress: string;
 
-  @IsArray()
+  @IsString()
   @IsNotEmpty()
-  abi: any[];
+  abiName: string;
 
   @IsString()
   @IsNotEmpty()
