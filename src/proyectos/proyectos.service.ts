@@ -7,6 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreditoToken } from '../credito-tokens/entities/credito-token.entity';
 import { CreateProyectoDto } from './dto/create-proyecto.dto';
+import { UpdateProyectoDto } from './dto/update-proyecto.dto';
 import { Proyecto } from './entities/proyecto.entity';
 
 @Injectable()
@@ -31,6 +32,32 @@ export class ProyectosService {
 
     const nuevoProyecto = this.proyectoRepository.create(createProyectoDto);
     return this.proyectoRepository.save(nuevoProyecto);
+  }
+
+  async update(id: string, updateProyectoDto: UpdateProyectoDto): Promise<Proyecto> {
+    // `preload` busca el proyecto por ID y luego fusiona los nuevos datos del DTO.
+    // Si no encuentra el proyecto, devuelve undefined.
+    const proyecto = await this.proyectoRepository.preload({
+      id,
+      ...updateProyectoDto,
+    });
+
+    if (!proyecto) {
+      throw new NotFoundException(`Proyecto con ID ${id} no encontrado`);
+    }
+
+    return this.proyectoRepository.save(proyecto);
+  }
+
+  async remove(id: string): Promise<void> {
+    const proyecto = await this.proyectoRepository.findOneBy({ id });
+
+    if (!proyecto) {
+      throw new NotFoundException(`Proyecto con ID ${id} no encontrado`);
+    }
+
+    // TypeORM se encargará de las relaciones si están configuradas con `onDelete: 'CASCADE'`
+    await this.proyectoRepository.remove(proyecto);
   }
 
   /**
