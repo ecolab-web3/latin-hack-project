@@ -56,18 +56,11 @@ export class ListenerService implements OnModuleInit {
       return;
     }
 
-    const abi = JSON.parse(
-      this.configService.get<string>('CONTRACT_ABI', '[]'),
-    ) as any[];
-    if (abi.length === 0) {
-      this.logger.error('El ABI del contrato no está definido o es inválido.');
-      return;
-    }
-
     for (const proyecto of proyectos) {
       // Solo iniciamos la escucha si no lo estamos haciendo ya
       if (!this.listeningContracts.has(proyecto.contractAddress)) {
-        this.startListeningToContract(proyecto, abi);
+        // Ahora pasamos el ABI específico de cada proyecto
+        this.startListeningToContract(proyecto, proyecto.abi);
       }
     }
   }
