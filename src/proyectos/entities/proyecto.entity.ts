@@ -43,6 +43,9 @@ export class Proyecto {
   @Column({ type: 'varchar', length: 42, unique: true, comment: 'Dirección del contrato inteligente del proyecto' })
   contractAddress: string;
 
+  @Column({ type: 'jsonb', comment: 'ABI del contrato inteligente en formato JSON' })
+  abi: any[];
+
   @Column({ type: 'varchar', length: 255, comment: 'Hash de IPFS que apunta a los documentos de verificación' })
   ipfsHashDocumentos: string;
 

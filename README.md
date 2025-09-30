@@ -15,7 +15,7 @@ El **Sustainable Credits Indexer** es un servicio backend robusto y escalable co
 
 El servicio escucha activamente los eventos de contratos inteligentes (estándar ERC-1155) que representan **Activos del Mundo Real (RWA)**, como créditos de carbono, biodiversidad o reciclaje. Procesa estos eventos en tiempo real y los persiste en una base de datos relacional (PostgreSQL), creando una fuente de datos rápida, fiable y consultable.
 
-Esto elimina la necesidad de que las aplicaciones cliente interactúen directamente con la blockchain para consultas de estado (ej. saldos de tokens), lo cual sería lento, costoso e ineficiente.
+Esto elimina la necesidad de que las aplicaciones cliente interactúen directamente con la blockchain para consultas de estado (ej. saldos de tokens), lo cual sería lento y costoso. Además, expone una API para la gestión dinámica de los proyectos a indexar.
 
 ## 2. Arquitectura y Flujo de Datos
 
@@ -23,7 +23,7 @@ El sistema está diseñado para ser desacoplado y auto-configurable, siguiendo u
 
 ```mermaid
 sequenceDiagram
-    participant Admin
+    participant Admin as Administrador
     participant API_Principal
     participant DB[PostgreSQL Database]
     participant Indexer [Sustainable Credits Indexer]
@@ -51,7 +51,7 @@ sequenceDiagram
 ### Componentes Clave:
 
 - **NestJS:** Framework progresivo de Node.js para construir aplicaciones backend eficientes y escalables.
-- **TypeORM:** Un ORM para TypeScript que permite una interacción fluida y segura con la base de datos.
+- **TypeORM:** Un ORM para TypeScript que permite una interacción fluida y segura con la base de datos, incluyendo migraciones y transacciones.
 - **PostgreSQL:** Base de datos relacional robusta para almacenar el estado indexado.
 - **Ethers.js:** Librería para interactuar con la blockchain Ethereum (o redes compatibles como Polygon), permitiendo la conexión a nodos RPC y la decodificación de eventos.
 
@@ -59,7 +59,8 @@ sequenceDiagram
 
 - **Indexación en Tiempo Real:** Utiliza WebSockets para conectarse a un nodo RPC y escuchar eventos de contratos tan pronto como se emiten.
 - **Configuración Dinámica:** El servicio consulta periódicamente la base de datos para descubrir nuevos contratos de proyectos. Esto permite añadir soporte a nuevos proyectos sin necesidad de reiniciar o redesplegar el indexador.
-- **Operaciones Atómicas:** Todas las actualizaciones en la base de datos que involucran múltiples registros (como una transferencia de tokens) se envuelven en **transacciones de base de datos**. Esto garantiza la integridad de los datos: o todas las operaciones se completan con éxito, o ninguna lo hace.
+- **API de Gestión:** Expone una API RESTful para registrar nuevos proyectos dinámicamente, incluyendo la dirección de su contrato y su ABI específico.
+- **Operaciones Atómicas:** Todas las actualizaciones en la base de datos que involucran múltiples registros (como una transferencia de tokens) se envuelven en **transacciones**. Esto garantiza la integridad de los datos: o todas las operaciones se completan con éxito, o ninguna lo hace.
 - **Manejo Integral de ERC-1155:** Interpreta correctamente el evento `TransferSingle` para diferenciar entre:
   - **Acuñación (Mint):** `from` es la dirección cero.
   - **Transferencia (Transfer):** `from` y `to` son billeteras válidas.
@@ -116,6 +117,36 @@ sequenceDiagram
 
 El indexador expone una API RESTful para consultar los datos procesados de manera eficiente.
 
+### Registrar un Nuevo Proyecto
+
+Permite a un administrador registrar un nuevo proyecto de sostenibilidad para que el indexador comience a monitorear su contrato.
+
+- **Endpoint:** `POST /proyectos`
+- **Descripción:** Crea un nuevo registro de proyecto en la base de datos. El `ListenerService` lo detectará automáticamente y comenzará a escuchar los eventos de su `contractAddress`.
+- **Cuerpo de la Petición (Request Body):**
+
+```json
+{
+  "nombre": "Proyecto de Conservación Marina",
+  "tipoCredito": "BIODIVERSIDAD",
+  "fechaVerificacion": "2023-11-15T00:00:00.000Z",
+  "cantidadAcunada": 0,
+  "contractAddress": "0x1234567890123456789012345678901234567890",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {"indexed": true, "name": "from", "type": "address"},
+        {"indexed": true, "name": "to", "type": "address"},
+        {"indexed": false, "name": "value", "type": "uint256"}
+      ],
+      "name": "TransferSingle",
+      "type": "event"
+    }
+  ],
+  "ipfsHashDocumentos": "QmY...Z"
+}
+```
 ### Consultar Tokens por Billetera
 
 Este endpoint demuestra la eficiencia de tener los datos indexados, permitiendo consultas instantáneas sin interactuar con la blockchain.
