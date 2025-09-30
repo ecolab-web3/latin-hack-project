@@ -14,11 +14,23 @@ The project is configured to deploy on "[Passet Hub](https://polkadot.js.org/app
 
 ## Setting up environment
 
-First, set up Metamask wallet for Passet Hub network, and get some PAS there. ([docs](https://docs.polkadot.com/develop/smart-contracts/wallets/))  
-In `contracts` directory, set up private key for hardhat:
+First, set up Metamask wallet for Passet Hub network:
 
+1. Add Passet Hub network to Metamask using [Chainlist](https://chainlist.org/?search=passet) - click "Add to Metamask" button
+2. Get PAS tokens from the [Polkadot Faucet](https://faucet.polkadot.io/?parachain=1111)
+3. View transactions on the [Block Explorer](http://blockscout-passet-hub.parity-testnet.parity.io/)
+4. More info: [Polkadot wallet setup docs](https://docs.polkadot.com/develop/smart-contracts/wallets/)
+
+In `contracts` directory, set up your environment variables:
+
+1. Copy the example environment file:
 ```
-npx hardhat vars set PRIVATE_KEY "INSERT_PRIVATE_KEY"
+cp .env.example .env
+```
+
+2. Edit `.env` and add your private key:
+```
+PRIVATE_KEY=INSERT_YOUR_PRIVATE_KEY_HERE
 ```
 
 [How to export private key from Metamask wallet](https://support.metamask.io/configure/accounts/how-to-export-an-accounts-private-key/)
@@ -30,7 +42,7 @@ Contracts are written in `contracts/contracts`. Each smart contract has a Hardha
 1. Edit smart contracts in `contracts/contracts`
 2. Edit ignition module in `contracts/igniton/modules`
 3. Run `npx hardhat compile` to compile smart contracts
-4. Run `npx hardhat ignition deploy ./ignition/modules/<ModuleName>.ts --network polkadotHubTestnet` to deploy them
+4. Run `npx hardhat ignition deploy ./ignition/modules/<ModuleName>.ts --network passetHubTestnet` to deploy them
 
 ### Note on committing `ignition/deployments`
 

@@ -1,5 +1,6 @@
 # compiled output
 /dist
+/blockchain/node_modules
 /node_modules
 /build
 
@@ -16,6 +17,11 @@ lerna-debug.log*
 .DS_Store
 
 # Tests
+/blockchain/artifacts
+/blockchain/cache
+/blockchain/coverage
+/blockchain/ignition/deployments
+/blockchain/typechain-types
 /coverage
 /.nyc_output
 
@@ -36,6 +42,7 @@ lerna-debug.log*
 !.vscode/extensions.json
 
 # dotenv environment variable files
+/blockchain/.env
 .env
 .env.development.local
 .env.test.local

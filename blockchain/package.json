@@ -1,0 +1,29 @@
+{
+  "name": ".-contracts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx hardhat test"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-ignition": "^0.15.12",
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@nomicfoundation/hardhat-viem": "^2.0.6",
+    "@parity/hardhat-polkadot": "^0.1.8",
+    "@types/chai-as-promised": "^7.1.8",
+    "chai": "^4.5.0",
+    "hardhat": "2.24.1",
+    "solc": "0.8.28",
+    "solidity-coverage": "^0.8.16",
+    "typescript": "~5.0.4",
+    "viem": "^2.31.7"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.2"
+  }
+}
