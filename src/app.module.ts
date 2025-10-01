@@ -6,6 +6,7 @@ import { CreditoTokensModule } from './credito-tokens/credito-tokens.module';
 import { AppController } from './app.controller';
 import { BlockchainListenerModule } from './blockchain-listener/blockchain-listener.module';
 import { AppService } from './app.service';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { AppService } from './app.service';
     ProyectosModule, // Este módulo ahora contiene nuestro controlador y servicio
     CreditoTokensModule,
     BlockchainListenerModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
