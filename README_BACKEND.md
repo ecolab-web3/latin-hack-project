@@ -87,7 +87,7 @@ La API implementa un mecanismo de autenticación basado en **Clave de API (API K
     DB_DATABASE=credits_indexer
 
     # Configuración de la Blockchain
-    JSON_RPC_URL="https://polygon-mumbai.g.alchemy.com/v2/YOUR_ALCHEMY_KEY"
+    JSON_RPC_URL="https://testnet-passet-hub-eth-rpc.polkadot.io"
 
     # Clave de API para proteger los endpoints de administración
     API_KEY="tu-clave-secreta-muy-dificil-de-adivinar"
@@ -96,6 +96,16 @@ La API implementa un mecanismo de autenticación basado en **Clave de API (API K
 3.  Instala las dependencias: `npm install`.
 4.  Ejecuta las migraciones de la base de datos (si aplica): `npm run typeorm:run`.
 5.  Inicia el servidor en modo de desarrollo: `npm run start:dev`.
+
+#### Detalles de la Red del Hackathon (Paseo Testnet)
+
+Para configurar wallets como MetaMask o para interactuar con la red, utiliza los siguientes detalles:
+
+- **Network Name:** Polkadot Hub TestNet
+- **Chain ID:** 420420422
+- **RPC URL:** https://testnet-passet-hub-eth-rpc.polkadot.io
+- **Block Explorer:** https://blockscout-passet-hub.parity-testnet.parity.io
+- **Faucet:** https://faucet.polkadot.io/?parachain=1111
 
 ## 6. API Endpoints
 
@@ -167,3 +177,11 @@ Representa la posesión de tokens por parte de una billetera. Esta tabla es el r
 - `proyecto`: Relación `ManyToOne` con la entidad `Proyecto`.
 
 ---
+
+## 8. Documentación Interactiva de la API (Swagger)
+
+Este proyecto incluye una documentación de API interactiva generada con Swagger (OpenAPI). Una vez que el servidor esté en funcionamiento, puedes acceder a ella desde tu navegador.
+
+- **URL:** http://localhost:3000/api-docs
+
+Desde esta interfaz, puedes ver todos los endpoints, sus parámetros, los esquemas de datos y probar las peticiones directamente. Para los endpoints protegidos, haz clic en el botón "Authorize" e introduce tu `API_KEY` para autenticar tus peticiones.
