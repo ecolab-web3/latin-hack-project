@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.28;
 
-import {ERC1155} from "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
-import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+import {ERC1155} from "@papermoonio/openzeppelin-contracts-polkadot/contracts/token/ERC1155/ERC1155.sol";
+import {Ownable} from "@papermoonio/openzeppelin-contracts-polkadot/contracts/access/Ownable.sol";
 import {ICarbonCredits_LatinHack} from "./interfaces/ICarbonCredits_LatinHack.sol";
-import {ERC1155Burnable} from "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
-import {AccessControlEnumerable} from "@openzeppelin/contracts/access/extensions/AccessControlEnumerable.sol";
-import {IERC165} from "@openzeppelin/contracts/utils/introspection/IERC165.sol";
-import {ERC165} from "@openzeppelin/contracts/utils/introspection/ERC165.sol";
+import {ERC1155Burnable} from "@papermoonio/openzeppelin-contracts-polkadot/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
+import {AccessControlEnumerable} from "@papermoonio/openzeppelin-contracts-polkadot/contracts/access/extensions/AccessControlEnumerable.sol";
+import {IERC165} from "@papermoonio/openzeppelin-contracts-polkadot/contracts/utils/introspection/IERC165.sol";
+import {ERC165} from "@papermoonio/openzeppelin-contracts-polkadot/contracts/utils/introspection/ERC165.sol";
 
 /**
  * @title CarbonCredits_LatinHack
