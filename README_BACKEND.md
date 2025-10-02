@@ -185,3 +185,38 @@ Este proyecto incluye una documentación de API interactiva generada con Swagger
 - **URL:** http://localhost:3000/api-docs
 
 Desde esta interfaz, puedes ver todos los endpoints, sus parámetros, los esquemas de datos y probar las peticiones directamente. Para los endpoints protegidos, haz clic en el botón "Authorize" e introduce tu `API_KEY` para autenticar tus peticiones.
+
+## 9. Pruebas (Testing)
+
+Para garantizar la robustez, fiabilidad y mantenibilidad del backend, se ha implementado una estrategia de **pruebas unitarias** utilizando **Jest**, el framework de testing estándar para NestJS.
+
+El objetivo de estas pruebas es validar la lógica de negocio y los componentes críticos de forma aislada, asegurando que cada pieza del sistema funcione como se espera antes de la integración.
+
+### Componentes Cubiertos por Pruebas:
+
+-   **`ApiKeyGuard` (Seguridad):**
+    -   Se valida que el guardián permita el acceso con una API Key válida.
+    -   Se comprueba que rechace peticiones con claves inválidas o sin clave.
+    -   Se asegura que bloquee el acceso si la variable de entorno `API_KEY` no está configurada, previniendo fallos de seguridad por mala configuración.
+
+-   **`ProyectosService` (Lógica de Negocio):**
+    -   Se prueba la creación exitosa de nuevos proyectos.
+    -   Se valida que se eviten duplicados (proyectos con la misma dirección de contrato).
+    -   Se comprueba el manejo de errores, como la no existencia de un archivo ABI.
+    -   Se asegura que la consulta de tokens por billetera (`findTokensByWallet`) funcione correctamente.
+
+-   **`ListenerService` (Procesamiento de Eventos):**
+    -   Se valida la lógica principal que diferencia entre eventos de **Acuñación (Mint)**, **Transferencia (Transfer)** y **Quema (Burn)**.
+    -   Se prueba que las operaciones sobre la base de datos (crear, decrementar, eliminar saldos) se realicen correctamente dentro de una transacción simulada.
+
+### Estrategia de Mocks:
+
+Para mantener las pruebas unitarias rápidas y deterministas, se utiliza un enfoque de **mocks (simulaciones)** para aislar las dependencias externas como la base de datos (TypeORM), el sistema de archivos (`fs`) y la configuración (`ConfigService`).
+
+### ¿Cómo Ejecutar las Pruebas?
+
+Para ejecutar toda la suite de pruebas, utiliza el siguiente comando desde la raíz del proyecto:
+
+```bash
+npm test
+```
