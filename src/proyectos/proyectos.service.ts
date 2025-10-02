@@ -11,6 +11,7 @@ import { CreditoToken } from '../credito-tokens/entities/credito-token.entity';
 import { CreateProyectoDto } from './dto/create-proyecto.dto';
 import { UpdateProyectoDto } from './dto/update-proyecto.dto';
 import { Proyecto } from './entities/proyecto.entity';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 
 @Injectable()
 export class ProyectosService {
@@ -19,6 +20,7 @@ export class ProyectosService {
     private readonly proyectoRepository: Repository<Proyecto>,
     @InjectRepository(CreditoToken)
     private readonly creditoTokenRepository: Repository<CreditoToken>,
+    private eventEmitter: EventEmitter2,
   ) {}
 
   async create(createProyectoDto: CreateProyectoDto): Promise<Proyecto> {
@@ -41,7 +43,13 @@ export class ProyectosService {
       abi, // Guardamos el objeto ABI completo en la BD
     });
 
-    return this.proyectoRepository.save(nuevoProyecto);
+    const proyectoGuardado = await this.proyectoRepository.save(nuevoProyecto);
+
+    // Emitimos un evento para notificar que un nuevo proyecto ha sido creado.
+    // El ListenerService escuchará este evento para empezar a monitorear el contrato.
+    this.eventEmitter.emit('proyecto.creado', proyectoGuardado);
+
+    return proyectoGuardado;
   }
 
   async update(

@@ -24,17 +24,17 @@ sequenceDiagram
     participant Indexer [Listener Service]
     participant Blockchain
 
+    Note over Indexer: Al iniciar, el Indexer carga todos los proyectos existentes desde la BD.
+    Indexer->>+DB: GET /proyectos
+    DB-->>-Indexer: Lista de proyectos existentes
+    Indexer->>Blockchain: Se suscribe a eventos de contratos existentes
+
     Admin->>+API_Principal: POST /proyectos (Registra un nuevo proyecto)
-    API_Principal->>+DB: Guarda el nuevo proyecto en la tabla 'proyectos'
-    DB-->>-API_Principal: Proyecto guardado
+    API_Principal->>+DB: Guarda el nuevo proyecto
+    DB-->>-API_Principal: Confirmación
+    API_Principal-->>Indexer: Emite evento 'proyecto.creado'
     API_Principal-->>-Admin: 201 Created
-
-    loop Chequeo periódico
-        Indexer->>+DB: Busca nuevos proyectos para monitorear
-        DB-->>-Indexer: Devuelve lista de proyectos
-    end
-
-    Indexer->>Blockchain: Se suscribe a eventos 'TransferSingle' del contrato
+    Indexer->>Blockchain: Se suscribe al nuevo contrato ¡al instante!
 
     Blockchain-->>Indexer: Emite evento (Acuñación, Transferencia o Quema)
     Indexer->>+DB: Procesa el evento y actualiza saldos (transacción atómica)
@@ -52,11 +52,12 @@ sequenceDiagram
 - **TypeORM:** Un ORM para TypeScript que facilita una interacción segura y tipada con la base de datos, incluyendo migraciones y transacciones.
 - **PostgreSQL:** Base de datos relacional para almacenar el estado indexado de los proyectos y los saldos de tokens.
 - **Ethers.js:** Librería para interactuar con la blockchain, permitiendo la conexión a nodos RPC y la decodificación de eventos de contratos.
+- **Event-Driven:** Utiliza el módulo `EventEmitter` de NestJS para una comunicación desacoplada y eficiente entre los servicios.
 
 ## 3. Características Principales
 
-- **Indexación en Tiempo Real:** Utiliza WebSockets para conectarse a un nodo RPC y escuchar eventos de contratos tan pronto como se emiten, garantizando que la base de datos esté siempre actualizada.
-- **Gestión Dinámica de Proyectos:** Expone una API RESTful para que un administrador pueda registrar, actualizar o eliminar proyectos dinámicamente sin necesidad de reiniciar el servidor.
+- **Indexación Reactiva en Tiempo Real:** Utiliza WebSockets para una conexión persistente a un nodo RPC. Gracias a su arquitectura basada en eventos, comienza a monitorear nuevos contratos **instantáneamente** después de su registro, sin demoras ni consultas periódicas.
+- **Gestión Dinámica de Proyectos:** Expone una API RESTful para que un administrador pueda registrar, actualizar o eliminar proyectos. El sistema reacciona a estos cambios en tiempo real.
 - **Manejo de ABIs por Archivo:** En lugar de enviar ABIs complejos en el cuerpo de una petición, la API carga los ABIs desde archivos `.json` locales (`src/abis`), haciendo la gestión más limpia, segura y mantenible.
 - **Operaciones Atómicas:** Todas las actualizaciones en la base de datos (acuñaciones, transferencias, etc.) se envuelven en **transacciones**. Esto garantiza la integridad de los datos: o todas las operaciones se completan con éxito, o ninguna lo hace.
 - **Manejo Integral de ERC-1155:** Interpreta correctamente el evento `TransferSingle` para diferenciar entre:

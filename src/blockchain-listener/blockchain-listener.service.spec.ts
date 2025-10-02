@@ -4,6 +4,7 @@ import { Repository, DataSource } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 import { ethers } from 'ethers';
 import { ListenerService } from './listener.service';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Proyecto, TipoCredito } from '../proyectos/entities/proyecto.entity';
 import { CreditoToken } from '../credito-tokens/entities/credito-token.entity';
 
@@ -81,6 +82,10 @@ describe('ListenerService', () => {
             get: jest.fn().mockReturnValue('ws://localhost:8545'),
           },
         },
+        {
+          provide: EventEmitter2,
+          useValue: { on: jest.fn() }, // Mock para el event emitter
+        },
       ],
     }).compile();
 
@@ -101,6 +106,24 @@ describe('ListenerService', () => {
 
   it('debería estar definido', () => {
     expect(service).toBeDefined();
+  });
+
+  describe('handleProyectoCreadoEvent', () => {
+    it('debería llamar a startListeningToContract cuando se recibe el evento', () => {
+      // Espiamos el método privado para verificar que es llamado
+      const startListeningSpy = jest
+        .spyOn(service as any, 'startListeningToContract')
+        .mockImplementation(() => {});
+
+      // Llamamos directamente al manejador del evento
+      service.handleProyectoCreadoEvent(mockProyecto);
+
+      // Verificamos que se llamó con los datos correctos
+      expect(startListeningSpy).toHaveBeenCalledWith(
+        mockProyecto,
+        mockProyecto.abi,
+      );
+    });
   });
 
   describe('handleTokenTransfer (Lógica de Mint/Transfer/Burn)', () => {
