@@ -129,7 +129,7 @@ describe('ProyectosService', () => {
       const result = await service.findTokensByWallet(walletAddress);
 
       expect(mockCreditoTokenRepository.find).toHaveBeenCalledWith({
-        where: { ownerWallet: walletAddress },
+        where: { ownerWallet: walletAddress.toLowerCase() },
         relations: ['proyecto'],
       });
       expect(result).toEqual(mockTokens);

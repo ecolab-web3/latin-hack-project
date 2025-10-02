@@ -58,7 +58,7 @@ sequenceDiagram
 - **Indexación en Tiempo Real:** Utiliza WebSockets para conectarse a un nodo RPC y escuchar eventos de contratos tan pronto como se emiten, garantizando que la base de datos esté siempre actualizada.
 - **Gestión Dinámica de Proyectos:** Expone una API RESTful para que un administrador pueda registrar, actualizar o eliminar proyectos dinámicamente sin necesidad de reiniciar el servidor.
 - **Manejo de ABIs por Archivo:** En lugar de enviar ABIs complejos en el cuerpo de una petición, la API carga los ABIs desde archivos `.json` locales (`src/abis`), haciendo la gestión más limpia, segura y mantenible.
-- **Operaciones Atómicas:** Todas las actualizaciones en la base de datos (acuñaciones, transferencias) se envuelven en **transacciones**. Esto garantiza la integridad de los datos: o todas las operaciones se completan con éxito, o ninguna lo hace.
+- **Operaciones Atómicas:** Todas las actualizaciones en la base de datos (acuñaciones, transferencias, etc.) se envuelven en **transacciones**. Esto garantiza la integridad de los datos: o todas las operaciones se completan con éxito, o ninguna lo hace.
 - **Manejo Integral de ERC-1155:** Interpreta correctamente el evento `TransferSingle` para diferenciar entre:
   - **Acuñación (Mint):** `from` es la dirección cero (`0x00...`).
   - **Transferencia (Transfer):** `from` y `to` son billeteras válidas.
@@ -167,7 +167,7 @@ Almacena la información de cada proyecto de sostenibilidad que se va a indexar.
 - `id`: UUID (Clave primaria).
 - `nombre`: Nombre del proyecto.
 - `tipoCredito`: Enum (`CARBONO`, `BIODIVERSIDAD`, `RECICLAJE`).
-- `contractAddress`: **Clave.** La dirección del contrato inteligente.
+- `contractAddress`: **Clave.** La dirección única del contrato inteligente.
 - `abi`: El ABI del contrato en formato `jsonb`. Esto permite que cada proyecto tenga un contrato diferente y se carga dinámicamente desde un archivo.
 - `ipfsHashDocumentos`: Hash de IPFS que apunta a la documentación de verificación del proyecto.
 

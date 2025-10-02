@@ -80,7 +80,7 @@ export class ProyectosService {
    */
   async findTokensByWallet(address: string): Promise<CreditoToken[]> {
     const tokens = await this.creditoTokenRepository.find({
-      where: { ownerWallet: address },
+      where: { ownerWallet: address.toLowerCase() },
       relations: ['proyecto'], // Carga la entidad 'Proyecto' relacionada
     });
 
