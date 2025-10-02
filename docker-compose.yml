@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  # Servicio de la Base de Datos PostgreSQL
+  db:
+    image: postgres:15-alpine
+    container_name: sustainable_credits_db
+    restart: always
+    ports:
+      - '5432:5432' # Mapea el puerto de la BD al host
+    environment:
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # Servicio de la Aplicación NestJS
+  app:
+    build: . # Construye la imagen usando el Dockerfile en el directorio actual
+    container_name: sustainable_credits_api
+    restart: always
+    ports:
+      - '3000:3000' # Mapea el puerto de la API al host
+    depends_on:
+      - db # Asegura que la BD se inicie antes que la app
+    env_file:
+      - .env # Carga las variables de entorno desde el archivo .env
+
+volumes:
+  postgres_data: # Volumen para persistir los datos de la BD

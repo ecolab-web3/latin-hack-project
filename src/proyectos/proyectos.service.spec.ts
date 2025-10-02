@@ -6,6 +6,7 @@ import { CreditoToken } from '../credito-tokens/entities/credito-token.entity';
 import { Repository } from 'typeorm';
 import { CreateProyectoDto } from './dto/create-proyecto.dto';
 import { ConflictException, NotFoundException } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import * as path from 'path';
 import * as fs from 'fs/promises';
 
@@ -32,6 +33,10 @@ describe('ProyectosService', () => {
     find: jest.fn(),
   };
 
+  const mockEventEmitter = {
+    emit: jest.fn(),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -43,6 +48,10 @@ describe('ProyectosService', () => {
         {
           provide: getRepositoryToken(CreditoToken),
           useValue: mockCreditoTokenRepository,
+        },
+        {
+          provide: EventEmitter2,
+          useValue: mockEventEmitter,
         },
       ],
     }).compile();
@@ -78,11 +87,15 @@ describe('ProyectosService', () => {
       ipfsHashDocumentos: 'Qm...',
     };
 
-    it('debería crear y guardar un proyecto exitosamente', async () => {
+    it('debería crear, guardar un proyecto y emitir un evento exitosamente', async () => {
       mockProyectoRepository.findOne.mockResolvedValue(null); // No existe un proyecto con esa dirección
-      mockProyectoRepository.save.mockImplementation((p) =>
-        Promise.resolve({ ...p, id: 'uuid-test' }),
-      );
+      const savedProyecto = {
+        ...createProyectoDto,
+        id: 'uuid-test',
+        abi: mockAbi,
+      };
+      mockProyectoRepository.create.mockReturnValue(savedProyecto);
+      mockProyectoRepository.save.mockResolvedValue(savedProyecto);
 
       const result = await service.create(createProyectoDto);
 
@@ -97,7 +110,11 @@ describe('ProyectosService', () => {
         expect.objectContaining({ abi: mockAbi }),
       );
       expect(mockProyectoRepository.save).toHaveBeenCalled();
-      expect(result).toHaveProperty('id');
+      expect(mockEventEmitter.emit).toHaveBeenCalledWith(
+        'proyecto.creado',
+        savedProyecto,
+      );
+      expect(result).toEqual(savedProyecto);
     });
 
     it('debería lanzar ConflictException si el contrato ya existe', async () => {
@@ -129,7 +146,7 @@ describe('ProyectosService', () => {
       const result = await service.findTokensByWallet(walletAddress);
 
       expect(mockCreditoTokenRepository.find).toHaveBeenCalledWith({
-        where: { ownerWallet: walletAddress },
+        where: { ownerWallet: walletAddress.toLowerCase() },
         relations: ['proyecto'],
       });
       expect(result).toEqual(mockTokens);

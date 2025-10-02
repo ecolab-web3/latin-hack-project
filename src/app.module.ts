@@ -7,9 +7,13 @@ import { AppController } from './app.controller';
 import { BlockchainListenerModule } from './blockchain-listener/blockchain-listener.module';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
+    EventEmitterModule.forRoot({
+      wildcard: true, // Permite escuchar patrones de eventos como 'proyecto.*'
+    }),
     ConfigModule.forRoot({
       isGlobal: true, // Variables de entorno disponibles en toda la app
     }),

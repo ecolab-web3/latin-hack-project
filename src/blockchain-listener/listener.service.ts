@@ -2,6 +2,7 @@ import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ethers, Contract, JsonRpcProvider, EventLog } from 'ethers';
+import { OnEvent } from '@nestjs/event-emitter';
 import { DataSource, Repository } from 'typeorm';
 import { Proyecto } from '../proyectos/entities/proyecto.entity';
 import { CreditoToken } from '../credito-tokens/entities/credito-token.entity';
@@ -35,12 +36,6 @@ export class ListenerService implements OnModuleInit {
   async onModuleInit() {
     this.logger.log('Iniciando la escucha de eventos de los contratos...');
     await this.startListeningToAllProjects();
-
-    // Opcional: Verificar nuevos proyectos cada 5 minutos
-    setInterval(() => {
-      this.logger.log('Buscando nuevos proyectos para monitorear...');
-      this.startListeningToAllProjects();
-    }, 300000);
   }
 
   /**
@@ -63,6 +58,17 @@ export class ListenerService implements OnModuleInit {
         this.startListeningToContract(proyecto, proyecto.abi);
       }
     }
+  }
+
+  /**
+   * Escucha el evento 'proyecto.creado' y comienza a monitorear el nuevo contrato.
+   * Reemplaza la necesidad de usar setInterval.
+   * @param proyecto El nuevo proyecto que fue creado.
+   */
+  @OnEvent('proyecto.creado')
+  handleProyectoCreadoEvent(proyecto: Proyecto) {
+    this.logger.log(`Nuevo proyecto detectado por evento: ${proyecto.nombre}`);
+    this.startListeningToContract(proyecto, proyecto.abi);
   }
 
   /**
