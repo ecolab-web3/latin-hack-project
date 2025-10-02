@@ -1,13 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.28;
 
-<<<<<<< HEAD
 import {IERC1155} from "@papermoonio/openzeppelin-contracts-polkadot/contracts/token/ERC1155/IERC1155.sol";
 import {IAccessControlEnumerable} from "@papermoonio/openzeppelin-contracts-polkadot/contracts/access/extensions/IAccessControlEnumerable.sol";
-=======
-import {IERC1155} from "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
-import {IAccessControlEnumerable} from "@openzeppelin/contracts/access/extensions/IAccessControlEnumerable.sol";
->>>>>>> main
 
 /**
  * @title ICarbonCredits_LatinHack
