@@ -24,7 +24,9 @@ import { AuthModule } from './auth/auth.module';
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_DATABASE'),
         autoLoadEntities: true, // TypeORM cargará automáticamente las entidades de los módulos registrados
-        synchronize: true, // ¡Perfecto para MVP! Crea/actualiza las tablas automáticamente. Desactiva en producción.
+        // En desarrollo, `synchronize` crea/actualiza las tablas automáticamente.
+        // En producción, debe ser `false` para usar migraciones y evitar la pérdida de datos.
+        synchronize: configService.get<string>('NODE_ENV') !== 'production',
       }),
     }),
     ProyectosModule, // Este módulo ahora contiene nuestro controlador y servicio

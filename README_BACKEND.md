@@ -79,6 +79,11 @@ La API implementa un mecanismo de autenticación basado en **Clave de API (API K
 2.  Crea un archivo `.env` en la raíz de esta carpeta con las siguientes variables:
 
     ```env
+    # Entorno de la aplicación (development, production)
+    # En 'development', la base de datos se sincroniza automáticamente.
+    # En 'production', la sincronización se deshabilita por seguridad.
+    NODE_ENV=development
+
     # Configuración de la Base de Datos PostgreSQL
     DB_HOST=localhost
     DB_PORT=5432
@@ -194,20 +199,20 @@ El objetivo de estas pruebas es validar la lógica de negocio y los componentes 
 
 ### Componentes Cubiertos por Pruebas:
 
--   **`ApiKeyGuard` (Seguridad):**
-    -   Se valida que el guardián permita el acceso con una API Key válida.
-    -   Se comprueba que rechace peticiones con claves inválidas o sin clave.
-    -   Se asegura que bloquee el acceso si la variable de entorno `API_KEY` no está configurada, previniendo fallos de seguridad por mala configuración.
+- **`ApiKeyGuard` (Seguridad):**
+  - Se valida que el guardián permita el acceso con una API Key válida.
+  - Se comprueba que rechace peticiones con claves inválidas o sin clave.
+  - Se asegura que bloquee el acceso si la variable de entorno `API_KEY` no está configurada, previniendo fallos de seguridad por mala configuración.
 
--   **`ProyectosService` (Lógica de Negocio):**
-    -   Se prueba la creación exitosa de nuevos proyectos.
-    -   Se valida que se eviten duplicados (proyectos con la misma dirección de contrato).
-    -   Se comprueba el manejo de errores, como la no existencia de un archivo ABI.
-    -   Se asegura que la consulta de tokens por billetera (`findTokensByWallet`) funcione correctamente.
+- **`ProyectosService` (Lógica de Negocio):**
+  - Se prueba la creación exitosa de nuevos proyectos.
+  - Se valida que se eviten duplicados (proyectos con la misma dirección de contrato).
+  - Se comprueba el manejo de errores, como la no existencia de un archivo ABI.
+  - Se asegura que la consulta de tokens por billetera (`findTokensByWallet`) funcione correctamente.
 
--   **`ListenerService` (Procesamiento de Eventos):**
-    -   Se valida la lógica principal que diferencia entre eventos de **Acuñación (Mint)**, **Transferencia (Transfer)** y **Quema (Burn)**.
-    -   Se prueba que las operaciones sobre la base de datos (crear, decrementar, eliminar saldos) se realicen correctamente dentro de una transacción simulada.
+- **`ListenerService` (Procesamiento de Eventos):**
+  - Se valida la lógica principal que diferencia entre eventos de **Acuñación (Mint)**, **Transferencia (Transfer)** y **Quema (Burn)**.
+  - Se prueba que las operaciones sobre la base de datos (crear, decrementar, eliminar saldos) se realicen correctamente dentro de una transacción simulada.
 
 ### Estrategia de Mocks:
 
