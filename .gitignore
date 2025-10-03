@@ -21,7 +21,7 @@ lerna-debug.log*
 /blockchain/artifacts
 /blockchain/cache
 /blockchain/coverage
-/blockchain/coverage.json
+blockchain/coverage.json
 /blockchain/ignition/deployments
 /blockchain/typechain-types
 coverage/ # Ignores all coverage folders
