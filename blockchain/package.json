@@ -21,7 +21,7 @@
     "solc": "0.8.28",
     "solidity-coverage": "^0.8.16",
     "typescript": "~5.0.4",
-    "viem": "^2.31.7"
+    "viem": "^2.37.12"
   },
   "dependencies": {
     "dotenv": "^17.2.2",
