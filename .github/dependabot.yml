@@ -1,0 +1,21 @@
+version: 2
+updates:
+  # Enable version updates for npm in the frontend directory
+  - package-ecosystem: "npm"
+    directory: "/frontend"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "npm"
+      - "dependencies"
+      - "frontend"
+
+  # Enable version updates for npm in the blockchain directory
+  - package-ecosystem: "npm"
+    directory: "/blockchain"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "npm"
+      - "dependencies"
+      - "blockchain"

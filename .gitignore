@@ -1,7 +1,7 @@
 # compiled output
 /dist
 /blockchain/node_modules
-/node_modules
+node_modules/
 /build
 
 # Logs
@@ -67,3 +67,6 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 #md
 TECHNICAL_REVIEW.md
+
+# libs
+blockchain/lib/

@@ -1,5 +1,7 @@
 # react-solidity-hardhat template
 
+[![CI](https://github.com/ecolab-web3/latin-hack-project/actions/workflows/ci.yml/badge.svg)](https://github.com/ecolab-web3/latin-hack-project/actions/workflows/ci.yml)
+
 This template sets up a combination of Solidity smart contracts and a React front-end app that interacts with these
 smart contracts.  
 This template includes:
