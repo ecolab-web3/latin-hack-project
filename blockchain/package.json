@@ -16,7 +16,7 @@
     "@nomicfoundation/hardhat-viem": "^3.0.0",
     "@parity/hardhat-polkadot": "^0.1.8",
     "@types/chai-as-promised": "^7.1.8",
-    "chai": "^4.5.0",
+    "chai": "^6.2.0",
     "hardhat": "^2.22.6",
     "solc": "0.8.28",
     "solidity-coverage": "^0.8.16",
