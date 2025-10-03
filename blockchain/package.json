@@ -20,7 +20,7 @@
     "hardhat": "^2.22.6",
     "solc": "0.8.28",
     "solidity-coverage": "^0.8.16",
-    "typescript": "~5.0.4",
+    "typescript": "~5.9.3",
     "viem": "^2.31.7"
   },
   "dependencies": {
