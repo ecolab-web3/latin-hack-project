@@ -1,14 +1,15 @@
 # compiled output
 /dist
 /blockchain/node_modules
-node_modules/
-/build
+node_modules/ # Ignores all node_modules folders
+build/ # Ignores all build folders
 
 # Logs
 logs
 *.log
 npm-debug.log*
 pnpm-debug.log*
+package-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
@@ -20,10 +21,11 @@ lerna-debug.log*
 /blockchain/artifacts
 /blockchain/cache
 /blockchain/coverage
+/blockchain/coverage.json
 /blockchain/ignition/deployments
 /blockchain/typechain-types
-/coverage
-/.nyc_output
+coverage/ # Ignores all coverage folders
+.nyc_output
 
 # IDEs and editors
 /.idea
@@ -43,7 +45,7 @@ lerna-debug.log*
 
 # dotenv environment variable files
 /blockchain/.env
-.env
+.env*
 .env.development.local
 .env.test.local
 .env.production.local
