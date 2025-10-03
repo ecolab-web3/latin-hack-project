@@ -1,6 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
 import { ProyectosModule } from './proyectos/proyectos.module';
 import { CreditoTokensModule } from './credito-tokens/credito-tokens.module';
 import { AppController } from './app.controller';
@@ -14,6 +16,12 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     EventEmitterModule.forRoot({
       wildcard: true, // Permite escuchar patrones de eventos como 'proyecto.*'
     }),
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60000, // 60 segundos en milisegundos
+        limit: 20, // 20 peticiones por IP en 60 segundos
+      },
+    ]),
     ConfigModule.forRoot({
       isGlobal: true, // Variables de entorno disponibles en toda la app
     }),
@@ -39,6 +47,13 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    // Aplicamos el ThrottlerGuard globalmente a todos los endpoints
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+  ],
 })
 export class AppModule {}

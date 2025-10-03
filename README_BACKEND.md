@@ -73,6 +73,9 @@ La API implementa un mecanismo de autenticación basado en **Clave de API (API K
 - **Mecanismo:** Las peticiones a estos endpoints deben incluir una cabecera `x-api-key` con un valor secreto.
 - **Guardia de Seguridad (`ApiKeyGuard`):** Un `Guard` de NestJS intercepta las peticiones a rutas protegidas y valida la clave de API contra la que está almacenada de forma segura en las variables de entorno (`.env`).
 - **Endpoints Públicos:** Las rutas de consulta (`GET`) permanecen abiertas para permitir el acceso público a los datos indexados.
+- **Limitación de Tasa (Rate Limiting):** Para proteger la API contra ataques de fuerza bruta y de denegación de servicio (DoS), se utiliza `@nestjs/throttler`. Por defecto, se limita a **20 peticiones por minuto por dirección IP** para todos los endpoints. Si se excede este límite, la API responderá con un error `429 Too Many Requests`.
+
+---
 
 ## 5. Configuración del Entorno
 
