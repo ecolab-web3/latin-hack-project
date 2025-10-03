@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "allowJs": false,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "types": ["vitest/globals"]
+  },
+  "include": ["src", "src/components/sendTransaction.tsx", "src/components/switchNetwork.tsx", "src/components/writeContract.tsx", "src/components/getBalance.tsx"],
+  "exclude": ["src/**/*.test.*", "src/**/*.spec.*", "src/test/**/*"],
+  "references": [{ "path": "./tsconfig.node.json" }]
+}

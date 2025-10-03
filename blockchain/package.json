@@ -1,0 +1,28 @@
+{
+  "name": "latin-hack-project-contracts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx hardhat test"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-viem": "^2.0.6",
+    "@nomicfoundation/hardhat-ignition": "^0.15.12",
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@parity/hardhat-polkadot": "^0.1.8",
+    "@types/chai-as-promised": "^7.1.8",
+    "hardhat": "2.24.1",
+    "chai": "^4.5.0",
+    "solc": "0.8.28",
+    "typescript": "~5.0.4",
+    "viem": "^2.31.7"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.2"
+  }
+}
