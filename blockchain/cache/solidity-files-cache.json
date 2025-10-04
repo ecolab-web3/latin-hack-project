@@ -197,6 +197,84 @@
       "artifacts": [
         "BiodiversityCredits_LatinHack"
       ]
+    },
+    "D:\\Dev\\latin-hack-project\\blockchain\\contracts\\CarbonCredits_LatinHack.sol": {
+      "lastModificationDate": 1759533500413,
+      "contentHash": "0e75e97606011d935538a35697b15b8f",
+      "sourceName": "contracts/CarbonCredits_LatinHack.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": false
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.28"
+      ],
+      "artifacts": [
+        "CarbonCredits_LatinHack"
+      ]
+    },
+    "D:\\Dev\\latin-hack-project\\blockchain\\contracts\\interfaces\\ICarbonCredits_LatinHack.sol": {
+      "lastModificationDate": 1759533684714,
+      "contentHash": "004b8319f6a9808cb176e8b6d8e2d11e",
+      "sourceName": "contracts/interfaces/ICarbonCredits_LatinHack.sol",
+      "solcConfig": {
+        "version": "0.8.28",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": false
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.28"
+      ],
+      "artifacts": [
+        "ICarbonCredits_LatinHack"
+      ]
     }
   }
 }

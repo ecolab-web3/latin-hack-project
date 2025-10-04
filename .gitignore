@@ -1,0 +1,24 @@
+# Dependencias de Node.js
+blockchain/node_modules/
+
+# Archivos de ambiente
+blockchain/.env
+
+# Archivos y carpetas generados por Hardhat
+blockchain/artifacts/
+blockchain/cache/
+blockchain/typechain-types/
+
+# Archivos de implementación de Hardhat Ignition
+blockchain/ignition/deployments/
+blockchain/ignition/journal/
+
+# Registros y archivos de depuración
+blockchain/*.log
+blockchain/npm-debug.log*
+blockchain/yarn-debug.log*
+blockchain/yarn-error.log*
+
+# Archivos e informes de la herramienta de cobertura (coverage)
+blockchain/coverage/
+blockchain/coverage.json

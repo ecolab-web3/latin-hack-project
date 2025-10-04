@@ -18,9 +18,17 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.BiodiversityCredits_LatinHack__factory>;
     getContractFactory(
+      name: "CarbonCredits_LatinHack",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.CarbonCredits_LatinHack__factory>;
+    getContractFactory(
       name: "CSA_LatinHack",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.CSA_LatinHack__factory>;
+    getContractFactory(
+      name: "ICarbonCredits_LatinHack",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ICarbonCredits_LatinHack__factory>;
     getContractFactory(
       name: "TestCSALatinHackHelper",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -40,10 +48,20 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.BiodiversityCredits_LatinHack>;
     getContractAt(
+      name: "CarbonCredits_LatinHack",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.CarbonCredits_LatinHack>;
+    getContractAt(
       name: "CSA_LatinHack",
       address: string | ethers.Addressable,
       signer?: ethers.Signer
     ): Promise<Contracts.CSA_LatinHack>;
+    getContractAt(
+      name: "ICarbonCredits_LatinHack",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ICarbonCredits_LatinHack>;
     getContractAt(
       name: "TestCSALatinHackHelper",
       address: string | ethers.Addressable,
@@ -65,9 +83,17 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.BiodiversityCredits_LatinHack>;
     deployContract(
+      name: "CarbonCredits_LatinHack",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.CarbonCredits_LatinHack>;
+    deployContract(
       name: "CSA_LatinHack",
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.CSA_LatinHack>;
+    deployContract(
+      name: "ICarbonCredits_LatinHack",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.ICarbonCredits_LatinHack>;
     deployContract(
       name: "TestCSALatinHackHelper",
       signerOrOptions?: ethers.Signer | DeployContractOptions
@@ -87,10 +113,20 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.BiodiversityCredits_LatinHack>;
     deployContract(
+      name: "CarbonCredits_LatinHack",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.CarbonCredits_LatinHack>;
+    deployContract(
       name: "CSA_LatinHack",
       args: any[],
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.CSA_LatinHack>;
+    deployContract(
+      name: "ICarbonCredits_LatinHack",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.ICarbonCredits_LatinHack>;
     deployContract(
       name: "TestCSALatinHackHelper",
       args: any[],
