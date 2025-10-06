@@ -12,7 +12,7 @@
   "type": "commonjs",
   "devDependencies": {
     "@nomicfoundation/hardhat-viem": "^2.0.6",
-    "@nomicfoundation/hardhat-ignition": "^0.15.12",
+    "@nomicfoundation/hardhat-ignition": "^3.0.3",
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",
     "@parity/hardhat-polkadot": "^0.1.8",
     "@types/chai-as-promised": "^7.1.8",
