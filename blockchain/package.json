@@ -19,7 +19,7 @@
     "hardhat": "2.24.1",
     "chai": "^4.5.0",
     "solc": "0.8.28",
-    "typescript": "~5.0.4",
+    "typescript": "~5.9.3",
     "viem": "^2.31.7"
   },
   "dependencies": {
