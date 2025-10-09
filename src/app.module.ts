@@ -10,6 +10,7 @@ import { BlockchainListenerModule } from './blockchain-listener/blockchain-liste
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     CreditoTokensModule,
     BlockchainListenerModule,
     AuthModule,
+    HealthModule,
   ],
   controllers: [AppController],
   providers: [
