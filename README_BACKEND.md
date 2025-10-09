@@ -160,6 +160,22 @@ El indexador expone una API RESTful para gestionar los proyectos y consultar los
     ]
     ```
 
+### Health Check (Público)
+
+- **`GET /health`**: Realiza un chequeo de salud detallado del servicio. Verifica la conectividad con la base de datos, la accesibilidad del nodo RPC de la blockchain y el uso de memoria.
+  - **Respuesta Exitosa (200 OK):** Todos los componentes están operativos.
+  - **Respuesta de Fallo (503 Service Unavailable):** Uno o más componentes no están saludables. El cuerpo de la respuesta indicará qué componente falló.
+
+- **`GET /health/status`**: Devuelve un estado simple y rápido del servicio, incluyendo el tiempo de actividad (`uptime`).
+  - **Ejemplo de Respuesta:**
+    ```json
+    {
+      "status": "ok",
+      "uptime": "354.12s",
+      "timestamp": "2024-05-22T18:30:00.000Z"
+    }
+    ```
+
 ## 7. Estructura de la Base de Datos
 
 El servicio utiliza dos entidades principales que se mapean a tablas en PostgreSQL.
