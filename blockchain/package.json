@@ -20,7 +20,7 @@
     "chai": "^4.5.0",
     "solc": "0.8.28",
     "typescript": "~5.0.4",
-    "viem": "^2.31.7"
+    "viem": "^2.38.3"
   },
   "dependencies": {
     "dotenv": "^17.2.2"
