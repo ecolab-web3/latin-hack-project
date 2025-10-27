@@ -16,7 +16,7 @@
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",
     "@parity/hardhat-polkadot": "^0.1.8",
     "@types/chai-as-promised": "^7.1.8",
-    "hardhat": "2.24.1",
+    "hardhat": "3.0.9",
     "chai": "^4.5.0",
     "solc": "0.8.28",
     "typescript": "~5.0.4",
